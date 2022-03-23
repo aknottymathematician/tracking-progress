@@ -1,0 +1,28 @@
+---
+title: "problem_tracking"
+output: html_document
+date: '2022-03-23'
+runtime: shiny
+---
+
+
+
+```{r setup, include=FALSE}
+library(DT)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## tracking
+
+```{r table, echo=FALSE}
+df = read.csv("/home/madhura/Madhura/JD_Leetcode/problem_list.csv")
+df$Problem = paste(df$LeetCode_no,df$Problem,sep = '-')
+df$LeetCode_no = NULL
+
+inputPanel(
+  selectizeInput(inputId = 'diff', label = 'difficulty_level',choices =  c("easy","medium","hard"),multiple = TRUE)
+)
+
+renderDataTable(expr = datatable(df, escape=FALSE),options = list(autoWidth = T))
+```
