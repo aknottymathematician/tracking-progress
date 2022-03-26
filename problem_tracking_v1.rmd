@@ -1,0 +1,39 @@
+---
+title: "progress tracking"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+library(shiny)
+library(shinydashboard)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r reading,echo=FALSE}
+df = read.csv("/home/madhura/Madhura/JD_Leetcode/problem_list.csv")
+df$Problem = paste(df$LeetCode_no,df$Problem,sep = '-')
+df$LeetCode_no = NULL
+
+```
+
+```{r shiny,echo=FALSE}
+ui <- dashboardPage(
+  dashboardHeader("hello"),
+  dashboardSidebar(selectizeInput(inputId = 'diff', label = 'difficulty_level',choices =  c("easy","medium","hard"),multiple = TRUE)),
+  dashboardBody(dataTableOutput('tbl'))
+)
+
+server <- function(input, output) {
+  df1 = df
+  df1$Link = sapply(df1$Link, function(x) toString(tags$a(href=paste0( x), x)))
+  output$tbl = renderDataTable(expr = datatable(df1, escape=FALSE),options = list(autoWidth = T))
+}
+
+shinyApp(ui, server)
+
+```
+
+
+```{r pressure,echo=FALSE}
+knitr::kable(df, format = "html")
+```
